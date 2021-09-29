@@ -22,6 +22,8 @@ services:
      - sql-server
     networks:
       - localdev
+    environment:
+      - ConnectionStrings__CommandConnectionString=Data Source='sql-server, 1433';DataBase=CommandsDb;User ID=SA;Password=sqlserverlongpassword123;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
 
 networks : 
   localdev:
