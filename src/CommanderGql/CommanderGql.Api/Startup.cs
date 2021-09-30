@@ -1,7 +1,9 @@
+using CommanderGql.Api.GraphQL;
+using CommanderGql.Application.Persistence;
 using CommanderGql.Infraestructure.Persistence;
+using GraphQL.Server.Ui.Voyager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace CommanderGql.Api
 {
+    public delegate IAppDbContext ServiceResolver();
+
     public class Startup
     {
         private readonly IConfiguration _configuration;
@@ -20,10 +24,11 @@ namespace CommanderGql.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(_configuration.GetConnectionString("CommandConnectionString"));
-            });
+            services.AddScoped<IAppDbContext, AppDbContext>();
+            services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("CommandConnectionString")));
+            services.AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddProjections();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -35,10 +40,12 @@ namespace CommanderGql.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapGraphQL();
+            });
+
+            app.UseGraphQLVoyager(new VoyagerOptions()
+            {
+                GraphQLEndPoint = "/graphql",
             });
         }
     }

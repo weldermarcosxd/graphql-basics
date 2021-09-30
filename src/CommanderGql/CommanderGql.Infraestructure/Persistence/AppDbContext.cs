@@ -18,6 +18,8 @@ namespace CommanderGql.Infraestructure.Persistence
             builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IInfraestructureAssemblyMarker)));
         }
 
+        public DbSet<Command> Commands { get; set; }
+
         public DbSet<Platform> Platforms { get; set; }
     }
 }
