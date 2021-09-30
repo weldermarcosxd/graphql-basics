@@ -1,4 +1,5 @@
 using CommanderGql.Api.GraphQL;
+using CommanderGql.Application.Persistence;
 using CommanderGql.Infraestructure.Persistence;
 using GraphQL.Server.Ui.Voyager;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace CommanderGql.Api
 {
+    public delegate IAppDbContext ServiceResolver();
+
     public class Startup
     {
         private readonly IConfiguration _configuration;
@@ -21,10 +24,11 @@ namespace CommanderGql.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<AppDbContext>();
+            services.AddScoped<IAppDbContext, AppDbContext>();
             services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("CommandConnectionString")));
             services.AddGraphQLServer()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddProjections();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

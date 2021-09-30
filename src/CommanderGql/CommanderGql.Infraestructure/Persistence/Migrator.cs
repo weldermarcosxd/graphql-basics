@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommanderGql.Application.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ namespace CommanderGql.Infraestructure.Persistence
 
             try
             {
-                var context = services.GetRequiredService<AppDbContext>();
+                var context = services.GetRequiredService<IAppDbContext>();
 
                 if (context.Database.IsSqlServer())
                     context.Database.Migrate();

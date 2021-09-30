@@ -19,6 +19,15 @@ namespace CommanderGql.Infraestructure.Persistence
                 );
             };
 
+            if (!context.Commands.Any())
+            {
+                context.Commands.AddRange(
+                    new Command { HowTo = "ip configuration", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Windows").Id, CommandLine = "ipconfig" },
+                    new Command { HowTo = "show history", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Osx").Id, CommandLine = "history" },
+                    new Command { HowTo = "list files in directory", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Linux").Id, CommandLine = "ls" }
+                );
+            };
+
             await context.SaveChangesAsync();
         }
     }

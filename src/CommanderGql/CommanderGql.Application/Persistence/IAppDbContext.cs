@@ -10,6 +10,8 @@ namespace CommanderGql.Application.Persistence
     {
         public DbSet<Platform> Platforms { get; set; }
 
+        public DbSet<Command> Commands { get; set; }
+
         public DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

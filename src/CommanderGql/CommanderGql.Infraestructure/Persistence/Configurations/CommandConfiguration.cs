@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CommanderGql.Infraestructure.Persistence.Configurations
 {
-    public class PlatformConfiguration : IEntityTypeConfiguration<Platform>
+    public class CommandConfiguration : IEntityTypeConfiguration<Command>
     {
-        public void Configure(EntityTypeBuilder<Platform> builder)
+        public void Configure(EntityTypeBuilder<Command> builder)
         {
-            builder.Property(o => o.Name)
+            builder.Property(o => o.HowTo)
                 .HasMaxLength(255);
 
-            builder.Property(x => x.LicenseKey)
+            builder.Property(x => x.CommandLine)
                 .HasMaxLength(255);
 
-            builder.HasMany(x => x.Commands)
-                .WithOne(x => x.Platform)
+            builder.HasOne(x => x.Platform)
+                .WithMany(x => x.Commands)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
