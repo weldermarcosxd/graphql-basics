@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>74273749-da35-499f-9b4e-b1d63f047569</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/ui/voyager</DockerServiceUrl>
     <DockerServiceName>commandergql.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

@@ -1,4 +1,6 @@
 using CommanderGql.Api.GraphQL;
+using CommanderGql.Api.GraphQL.Commands;
+using CommanderGql.Api.GraphQL.Platforms;
 using CommanderGql.Application.Persistence;
 using CommanderGql.Infraestructure.Persistence;
 using GraphQL.Server.Ui.Voyager;
@@ -28,13 +30,21 @@ namespace CommanderGql.Api
             services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("CommandConnectionString")));
             services.AddGraphQLServer()
                 .AddQueryType<Query>()
-                .AddProjections();
+                .AddMutationType<Mutation>()
+                .AddSubscriptionType<Subscription>()
+                .AddType<PlatformType>()
+                .AddType<CommandType>()
+                .AddFiltering()
+                .AddSorting()
+                .AddInMemorySubscriptions();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
+
+            app.UseWebSockets();
 
             app.UseRouting();
 
