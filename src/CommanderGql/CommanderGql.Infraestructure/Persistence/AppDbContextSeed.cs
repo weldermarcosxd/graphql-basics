@@ -21,10 +21,15 @@ namespace CommanderGql.Infraestructure.Persistence
 
             if (!context.Commands.Any())
             {
+                await context.SaveChangesAsync();
+
+                var windows = context.Platforms.FirstOrDefault(x => x.Name == "Windows");
+                var osx = context.Platforms.FirstOrDefault(x => x.Name == "Osx");
+                var linux = context.Platforms.FirstOrDefault(x => x.Name == "Linux");
                 context.Commands.AddRange(
-                    new Command { HowTo = "ip configuration", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Windows").Id, CommandLine = "ipconfig" },
-                    new Command { HowTo = "show history", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Osx").Id, CommandLine = "history" },
-                    new Command { HowTo = "list files in directory", PlatformId = context.Platforms.FirstOrDefault(x => x.Name == "Linux").Id, CommandLine = "ls" }
+                    new Command { HowTo = "ip configuration", PlatformId = windows.Id, CommandLine = "ipconfig" },
+                    new Command { HowTo = "show history", PlatformId = osx.Id, CommandLine = "history" },
+                    new Command { HowTo = "list files in directory", PlatformId = linux.Id, CommandLine = "ls" }
                 );
             };
 
